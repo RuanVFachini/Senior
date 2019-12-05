@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HospedeRepository extends JpaRepository<Hospede, Long> {
 
-    public Hospede findByNomeOrRgOrTelefone(String nome, String rg, String telefone);
+    Hospede findByNomeOrCpfOrTelefone(String nome, String cpf, String telefone);
 }

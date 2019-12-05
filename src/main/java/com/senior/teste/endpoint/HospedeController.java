@@ -1,6 +1,6 @@
 package com.senior.teste.endpoint;
 
-import com.senior.teste.Exception.HospedeNaoEncontradoException;
+import com.senior.teste.DTO.HospedeDTO;
 import com.senior.teste.model.Hospede;
 import com.senior.teste.service.HospedeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +14,29 @@ public class HospedeController {
     @Autowired
     private HospedeService service;
 
-    @RequestMapping("/hospede/antigos")
-    public List<Hospede> getAntigos(){
-        return service.getAntigos();
-    }
-
-    @RequestMapping("/hospede")
+    @GetMapping("/hospede")
     public List<Hospede> getAll(){
         return service.getAll();
     }
 
-    @RequestMapping("/hospede/{id}")
-    public Hospede get(@PathVariable Long id) {
-        return service.get(id);
+    @GetMapping("/hospede/{id}")
+    public Hospede getById(@PathVariable Long id) {
+        return service.getById(id);
+    }
+
+    @GetMapping("/hospede/search")
+    public Hospede getById(@RequestBody Hospede hospede) {
+        return service.getByInfo(hospede);
+    }
+
+    @GetMapping("hospede/list/checkin")
+    public List<HospedeDTO> emCheckin(){
+        return service.getCheckin();
+    }
+
+    @GetMapping("hospede/list/checkout")
+    public List<HospedeDTO> emCheckout(){
+        return service.getCheckout();
     }
 
     @PostMapping("/hospede")

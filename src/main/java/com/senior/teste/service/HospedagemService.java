@@ -1,14 +1,11 @@
 package com.senior.teste.service;
 
+import com.senior.teste.Exception.HospedagemNaoEncontradaException;
 import com.senior.teste.model.Hospedagem;
-import com.senior.teste.model.Hospede;
 import com.senior.teste.repository.HospedagemRepository;
-import com.senior.teste.repository.HospedeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -16,9 +13,17 @@ import java.util.List;
 public class HospedagemService {
 
     @Autowired
-    private HospedagemRepository repository;
+    private HospedagemRepository hospedagemRepository;
 
     public HospedagemService(){
+    }
+
+    public List<Hospedagem> getAll(){
+        return hospedagemRepository.findAll();
+    }
+
+    public Hospedagem getById(Long id){
+        return hospedagemRepository.findById(id).orElseThrow(() -> new HospedagemNaoEncontradaException(id));
     }
 
     public Hospedagem add(Hospedagem hospedagem){
@@ -28,7 +33,7 @@ public class HospedagemService {
 
         Double valor = dias[0]*120.00 + dias[1]*150.00;
 
-        if(hospedagem.isAddicionalVeiculo()){
+        if(hospedagem.isAdicionalVeiculo()){
             valor += dias[0]*15.00 + dias[1]*20.00;
         }
 
@@ -43,10 +48,37 @@ public class HospedagemService {
         }
 
         hospedagem.setValor(valor);
-        return repository.save(hospedagem);
+        return hospedagemRepository.save(hospedagem);
     }
 
-    public void checkin(Hospede hospede){
+    public Hospedagem update(Hospedagem novaHospedagem, Long id){
+        return hospedagemRepository.findById(id).map(hospedagem -> {
+            hospedagem.setValor(novaHospedagem.getValor());
+            hospedagem.setAdicionalVeiculo(novaHospedagem.isAdicionalVeiculo());
+            hospedagem.setCheckin(novaHospedagem.isCheckin());
+            hospedagem.setCheckout(novaHospedagem.isCheckout());
+            hospedagem.setDataCheckin(novaHospedagem.getDataCheckin());
+            hospedagem.setDataCheckout(novaHospedagem.getDataCheckout());
+            hospedagem.setHospede(novaHospedagem.getHospede());
+            return hospedagemRepository.save(hospedagem);
+        }).orElseThrow(() -> new HospedagemNaoEncontradaException(id));
+    }
 
+    public void delete(Long id){
+        hospedagemRepository.deleteById(id);
+    }
+
+    public Hospedagem checkin(Long id){
+        return hospedagemRepository.findById(id).map(hospedagem -> {
+            hospedagem.setCheckin(true);
+            return hospedagemRepository.save(hospedagem);
+        }).orElseThrow(() -> new HospedagemNaoEncontradaException(id));
+    }
+
+    public Hospedagem checkout(Long id){
+        return hospedagemRepository.findById(id).map(hospedagem -> {
+            hospedagem.setCheckout(true);
+            return hospedagemRepository.save(hospedagem);
+        }).orElseThrow(() -> new HospedagemNaoEncontradaException(id));
     }
 }
