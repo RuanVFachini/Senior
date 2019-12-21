@@ -26,7 +26,7 @@ public class Hospede implements Serializable {
     private String cpf;
     @Column(name = "telefone")
     private String telefone;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Hospedagem> hospedagens = new ArrayList<>();
 
 }

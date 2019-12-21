@@ -29,15 +29,15 @@ public class HospedeController {
         return service.getByInfo(hospede);
     }
 
-    @GetMapping("hospede/list/checkin")
-    public List<HospedeDTO> emCheckin(){
-        return service.getCheckin();
-    }
-
-    @GetMapping("hospede/list/checkout")
-    public List<HospedeDTO> emCheckout(){
-        return service.getCheckout();
-    }
+//    @GetMapping("hospede/list/checkin")
+//    public List<HospedeDTO> emCheckin(){
+//        return service.getCheckin();
+//    }
+//
+//    @GetMapping("hospede/list/checkout")
+//    public List<HospedeDTO> emCheckout(){
+//        return service.getCheckout();
+//    }
 
     @PostMapping("/hospede")
     public Hospede save(@RequestBody Hospede hospede){
